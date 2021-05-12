@@ -1,0 +1,36 @@
+{
+  "name": "space-monutir",
+  "version": "1.0.0",
+  "description": "// https://github.com/Adamant-im/ETH-transactions-storage",
+  "main": "src/main.js",
+  "dependencies": {
+    "@babel/runtime": "^7.9.6",
+    "axios": "^0.21.1",
+    "babel-plugin-inline-dotenv": "^1.5.0",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "7.9.6",
+    "nodemon": "^2.0.3"
+  },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
+  },
+  "scripts": {
+    "start": "nodemon src/main.js --exec babel-node",
+    "clean": "rm -rf build && mkdir build",
+    "build": "npm run clean && babel src -d build && cp .env ./build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://francoode@bitbucket.org/mellowwallet/indexer-blockchain.git"
+  },
+  "author": "francoode",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/mellowwallet/indexer-blockchain#readme"
+}
