@@ -19,33 +19,38 @@ module.exports = class Database {
             console.log('Connected to SQlite database.');
         });
 
-        await this.createTable();
+        this.createTable();
     }
 
     getDb() {
         return this.db;
     }
 
-    async createTable() {
-        const createStamen = `CREATE TABLE IF NOT EXISTS products (name TEXT NOT NULL UNIQUE, path TEXT NOT NULL UNIQUE)`
-        await this.db.run(createStamen);
+    createTable() {
+        const createStamen = `CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, path TEXT NOT NULL UNIQUE)`
+        this.db.run(createStamen);
     }
 
     async insertProduct(name, file) {
-        this.db.run('INSERT INTO products VALUES (?, ?)', [name, file], (err) => {
-            if (err) {
-                throw new Error(err.toString());
-            } else {
-                console.log('Row was added to the table');
+        return new Promise((resolve, reject) => {
+                this.db.run('INSERT INTO products(name, path) VALUES (?, ?); SELECT last_insert_rowid();', [name, file], function (err) {
+                    if (err) {
+                        reject(err.toString())
+                    } else {
+                        console.log('Row was added to the table');
+                        resolve(this.lastID)
+                    }
+                })
             }
-        });
+        )
+
     }
 
     getAllProducts() {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
                 this.db.all('SELECT * FROM products', (err, rows) => {
                     if (err) {
-                        throw new Error(err.toString());
+                        reject(err.toString())
                     } else {
                         resolve(rows);
                     }

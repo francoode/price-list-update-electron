@@ -2,20 +2,17 @@ const Database = require('./database');
 const Jimp = require('jimp');
 
 window.addEventListener('load', async () => {
-    const db = await Database.getInstance();
-    const products = await db.getAllProducts();
-    const tableRef = document.getElementById('products-list');
-    console.log(products);
-    products.forEach((p, index) => {
+    try {
+        const db = await Database.getInstance();
+        const products = await db.getAllProducts();
 
-        const newRow   = tableRef.insertRow(index);
+        products.forEach((p) => {
+            insertRow(p);
+        })
+    } catch (e) {
+        console.log(e);
+    }
 
-        const cellName = newRow.insertCell(0);
-        cellName.appendChild(document.createTextNode(p.name));
-
-        const cellPath = newRow.insertCell(1);
-        cellPath.appendChild(document.createTextNode(p.path));
-    })
 });
 
 document.getElementById('click').addEventListener('click', () => {
@@ -35,16 +32,56 @@ document.getElementById('form-new-product').addEventListener('submit', async (ev
     try {
         event.preventDefault();
         const name = document.getElementById('product-name').value;
-        const file = document.getElementById('product-file').files[0].name;
+        const path = document.getElementById('product-file').files[0].name;
+
+        if(!name || !path) {
+            throw new Error('Invalid value');
+        }
 
         const db = await Database.getInstance();
-        const product = await db.insertProduct(name, file);
-        const products = await db.getAllProducts();
+        const id = await db.insertProduct(name, path);
 
-        console.log(products);
+        insertRow({id, name, path});
+
+        document.getElementById("form-new-product").reset();
 
         return false;
     } catch (e) {
         console.log(e);
+        document.getElementById("form-new-product").reset();
     }
 })
+
+document.getElementById('tab-new').addEventListener('click', () => {
+    const form = document.getElementById('container-product-form');
+    const list = document.getElementById('container-list');
+
+    form.style.display = 'block';
+    list.style.display = 'none';
+})
+
+document.getElementById('tab-list').addEventListener('click', () => {
+    const form = document.getElementById('container-product-form');
+    const list = document.getElementById('container-list');
+
+    form.style.display = 'none';
+    list.style.display = 'block';
+})
+
+function insertRow(product) {
+    const tableRef = document.getElementById('products-list');
+    const newRow   = tableRef.insertRow(tableRef.rows.length);
+
+    const cellName = newRow.insertCell();
+    cellName.appendChild(document.createTextNode(product.name));
+
+    const cellPath = newRow.insertCell();
+    cellPath.appendChild(document.createTextNode(product.path));
+
+    const cellPrice = newRow.insertCell();
+    const priceElement = document.createElement("input");
+    priceElement.setAttribute('type', 'number');
+    priceElement.setAttribute('id', `price-${product.id}`);
+    priceElement.setAttribute('required', 'true');
+    cellPrice.appendChild(priceElement);
+}

@@ -2,29 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/photon.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
     <title>Hola</title>
 </head>
 <body>
 
-<button>Nuevo producto</button>
-<form id="form-new-product">
-    <label>Nombre producto:</label>
-    <input id="product-name" type="text"/>
-    <label>Ubicación imagen:</label>
-    <input id="product-file" type="file"/>
-    <button type="submit" id="btn-add">Agregar</button>
-</form>
-<table id="products-list">
-    <tr>
-        <th>Producto</th>
-        <th>Archivo</th>
-        <th>Nuevo Precio</th>
-    </tr>
-    <tr>
+<div class="tab-group">
+    <div id="tab-list" class="tab-item">
+        <span class="icon"></span>
+        Lista
+    </div>
+    <div id="tab-new" class="tab-item active">
+        <span class="icon"></span>
+        Nuevo
+    </div>
+</div>
 
-    </tr>
-</table>
-<button id="click">Click!</button>
+<div id="container-product-form" style="display: none">
+    <form id="form-new-product">
+        <div class="form-group">
+            <label>Nombre producto:</label>
+            <input class="form-control" id="product-name" type="text" required/>
+        </div>
+
+        <div class="form-group">
+            <label>Imagen:</label>
+            <input class="form-control" id="product-file" type="file" required/>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-large btn-default" type="submit" id="btn-add">Agregar</button>
+        </div>
+    </form>
+</div>
+
+<div id="container-list">
+    <table class="table-striped" id="products-list">
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Archivo</th>
+            <th>Precio</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <button id="click">Click!</button>
+</div>
+
 
 <script src="./handle.js"></script>
 <script src="./database.js"></script>
