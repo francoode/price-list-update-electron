@@ -32,10 +32,26 @@ module.exports = class Database {
     }
 
     async insertProduct(name, file) {
-        return await this.db.run('INSERT INTO products VALUES (?, ?)', [name, file], (err) => {
-            if(err) return console.log(err.message);
-            console.log('Row was added to the table');
+        this.db.run('INSERT INTO products VALUES (?, ?)', [name, file], (err) => {
+            if (err) {
+                throw new Error(err.toString());
+            } else {
+                console.log('Row was added to the table');
+            }
         });
+    }
+
+    getAllProducts() {
+        return new Promise(resolve => {
+                this.db.all('SELECT * FROM products', (err, rows) => {
+                    if (err) {
+                        throw new Error(err.toString());
+                    } else {
+                        resolve(rows);
+                    }
+                })
+            }
+        )
     }
 }
 

@@ -1,6 +1,23 @@
 const Database = require('./database');
 const Jimp = require('jimp');
 
+window.addEventListener('load', async () => {
+    const db = await Database.getInstance();
+    const products = await db.getAllProducts();
+    const tableRef = document.getElementById('products-list');
+    console.log(products);
+    products.forEach((p, index) => {
+
+        const newRow   = tableRef.insertRow(index);
+
+        const cellName = newRow.insertCell(0);
+        cellName.appendChild(document.createTextNode(p.name));
+
+        const cellPath = newRow.insertCell(1);
+        cellPath.appendChild(document.createTextNode(p.path));
+    })
+});
+
 document.getElementById('click').addEventListener('click', () => {
 
     Jimp.read(`${__dirname}/test.jpeg`)
@@ -22,8 +39,9 @@ document.getElementById('form-new-product').addEventListener('submit', async (ev
 
         const db = await Database.getInstance();
         const product = await db.insertProduct(name, file);
+        const products = await db.getAllProducts();
 
-        console.log(product);
+        console.log(products);
 
         return false;
     } catch (e) {
