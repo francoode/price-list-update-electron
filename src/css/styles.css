@@ -3,5 +3,18 @@
 }
 
 #products-list {
-    margin-top: 10px;
+}
+
+#form-message-success {
+}
+
+#form-message-error {
+}
+
+.success {
+    color: #29a03b;
+}
+
+.error {
+    color: red;
 }
