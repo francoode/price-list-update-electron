@@ -23,14 +23,19 @@ document.getElementById('process').addEventListener('click', async () => {
         if (products.length >= 1) {
             for (const p of products) {
                 try {
-                    const path = `${__dirname}/img/${p.path}`;
-                    const image = await Jimp.read(path);
-                    const font = await Jimp.loadFont(Jimp.FONT_SANS_64_BLACK);
                     const price = document.getElementById(`price-${p.id}`).value;
-                    await image.print(font, 100, 500, price);
-                    await image.write(`${__dirname}/out/${p.name}.jpg`);
+                    if (price) {
+                        const path = `${__dirname}/img/${p.path}`;
+                        const image = await Jimp.read(path);
+                        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
+                        await image.resize(600, 600);
+                        await image.print(font, 65, 500, `$${price}`);
+                        await image.write(`${__dirname}/out/${p.name}.jpg`);
 
-                    document.getElementById(`result-${p.id}`).innerHTML = `<span class="icon icon-check success"></span>`
+                        document.getElementById(`result-${p.id}`).innerHTML = `<span class="icon icon-check success"></span>`
+                    } else {
+                        document.getElementById(`result-${p.id}`).innerHTML = `<span class="icon icon-cancel error"></span>`
+                    }
                 } catch (e) {
                     document.getElementById(`result-${p.id}`).innerHTML = `<span class="icon icon-cancel error"></span>`
                     console.log(e);
@@ -87,7 +92,8 @@ document.getElementById('tab-list').addEventListener('click', () => {
 
 function insertRow(product) {
     const tableRef = document.getElementById('products-list');
-    const newRow = tableRef.insertRow(tableRef.rows.length);
+    const idx = tableRef.rows.length;
+    const newRow = tableRef.insertRow(idx);
 
     const cellName = newRow.insertCell();
     cellName.appendChild(document.createTextNode(product.name));
@@ -97,7 +103,7 @@ function insertRow(product) {
 
     const cellPrice = newRow.insertCell();
     const priceElement = document.createElement("input");
-    priceElement.setAttribute('type', 'number');
+    priceElement.setAttribute('type', 'text');
     priceElement.setAttribute('id', `price-${product.id}`);
     priceElement.setAttribute('required', 'true');
     cellPrice.appendChild(priceElement);
@@ -108,4 +114,11 @@ function insertRow(product) {
     resultElement.innerHTML = `<span id="delete-${product.id}" class="icon icon-trash"></span>`
 
     cellResult.appendChild(resultElement);
+
+    document.getElementById(`delete-${product.id}`).addEventListener('click', async () => {
+        const db = await Database.getInstance();
+        await db.removeProduct(product.id);
+        tableRef.deleteRow(idx)
+    })
 }
+

@@ -3,6 +3,34 @@
   "version": "1.0.0",
   "description": "// https://github.com/Adamant-im/ETH-transactions-storage",
   "main": "src/main.js",
+  "build": {
+    "appId": "enupal-electronv1",
+    "asar": true,
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
+  },
   "dependencies": {
     "@babel/runtime": "^7.9.6",
     "axios": "^0.21.1",
@@ -28,10 +56,10 @@
     "babel-core": "7.0.0-bridge.0"
   },
   "scripts": {
+    "postinstall": "install-app-deps",
     "start": "electron .",
-    "clean": "rm -rf build && mkdir build",
-    "build": "npm run clean && babel src -d build && cp .env ./build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",

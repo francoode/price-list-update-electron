@@ -58,6 +58,20 @@ module.exports = class Database {
             }
         )
     }
+
+    removeProduct(id) {
+        return new Promise((resolve, reject) => {
+                this.db.run(`DELETE FROM products WHERE id=?`,[id], function (err) {
+                    if (err) {
+                        reject(err.toString())
+                    } else {
+                        console.log('Row remove from the table');
+                        resolve()
+                    }
+                })
+            }
+        )
+    }
 }
 
 
