@@ -122,3 +122,9 @@ function insertRow(product) {
     })
 }
 
+document.getElementById('directory-form').addEventListener('submit', () => {
+    const path = document.getElementById('img-directory').value;
+
+    console.log(path);
+})
+

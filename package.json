@@ -1,7 +1,7 @@
 {
-  "name": "space-monutir",
+  "name": "duro",
   "version": "1.0.0",
-  "description": "// https://github.com/Adamant-im/ETH-transactions-storage",
+  "description": "",
   "main": "src/main.js",
   "build": {
     "appId": "enupal-electronv1",
@@ -36,6 +36,7 @@
     "axios": "^0.21.1",
     "babel-plugin-inline-dotenv": "^1.5.0",
     "dotenv": "^8.2.0",
+    "electron-squirrel-startup": "^1.0.0",
     "jimp": "^0.16.1",
     "sqlite3": "^5.0.2"
   },
@@ -48,6 +49,11 @@
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-typescript": "^7.13.0",
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "electron": "^12.0.7",
     "nodemon": "^2.0.3"
@@ -56,16 +62,17 @@
     "babel-core": "7.0.0-bridge.0"
   },
   "scripts": {
-    "postinstall": "install-app-deps",
-    "start": "electron .",
+    "start": "electron-forge start",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://francoode@bitbucket.org/mellowwallet/indexer-blockchain.git"
+    "url": ""
   },
   "author": "francoode",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/mellowwallet/indexer-blockchain#readme"
+  "homepage": ""
 }
