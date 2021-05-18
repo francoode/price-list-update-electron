@@ -1,6 +1,10 @@
 const Database = require('./database');
 const Jimp = require('jimp');
 
+const {remote} = require('electron');
+const dialog = remote.dialog;
+const win = remote.getCurrentWindow();
+
 window.addEventListener('load', async () => {
     try {
         const db = await Database.getInstance();
@@ -9,6 +13,8 @@ window.addEventListener('load', async () => {
         products.forEach((p) => {
             insertRow(p);
         })
+
+        setParameter();
     } catch (e) {
         console.log(e);
     }
@@ -121,4 +127,26 @@ function insertRow(product) {
         tableRef.deleteRow(idx)
     })
 }
+
+document.getElementById('img-directory').addEventListener('click', async (event) => {
+    event.preventDefault();
+    const {filePaths} = await dialog.showOpenDialog(win, {properties: ['openDirectory']});
+
+
+    if (filePaths) {
+        const db = await Database.getInstance();
+        await db.saveParameter(filePaths);
+        await setParameter();
+    }
+})
+
+async function setParameter() {
+    const db = await Database.getInstance();
+    const parameters = await db.getParameters();
+    if(parameters && Array.isArray(parameters) && parameters[0]) {
+        document.getElementById('img-directory-actual').innerText = parameters[0].base_path;
+    }
+}
+
+
 

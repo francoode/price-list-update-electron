@@ -1,5 +1,6 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, dialog} = require('electron');
 let mainWindow;
+
 
 app.on('ready', async () => {
     mainWindow = new BrowserWindow({
@@ -8,10 +9,10 @@ app.on('ready', async () => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            enableRemoteModule: true,
             devTools: true
         }
     });
 
     await mainWindow.loadURL('file://' + __dirname + '/index.html');
 });
-
