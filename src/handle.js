@@ -14,7 +14,7 @@ window.addEventListener('load', async () => {
             insertRow(p);
         })
 
-        setParameter();
+        await setParameter();
     } catch (e) {
         console.log(e);
     }
@@ -26,17 +26,27 @@ document.getElementById('process').addEventListener('click', async () => {
         const db = await Database.getInstance();
         const products = await db.getAllProducts();
 
+        let path = '';
+        const parameters = await db.getParameters();
+        if(parameters && Array.isArray(parameters) && parameters[0]) {
+            path = parameters[0].base_path;
+        }
+
+        if(!path) {
+            throw new Error('No path for images');
+        }
+
         if (products.length >= 1) {
             for (const p of products) {
                 try {
                     const price = document.getElementById(`price-${p.id}`).value;
                     if (price) {
-                        const path = `${__dirname}/img/${p.path}`;
+                        const path = `${path}/img/${p.path}`;
                         const image = await Jimp.read(path);
                         const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
                         await image.resize(600, 600);
                         await image.print(font, 65, 500, `$${price}`);
-                        await image.write(`${__dirname}/out/${p.name}.jpg`);
+                        await image.write(`${path}/out/${p.name}.jpg`);
 
                         document.getElementById(`result-${p.id}`).innerHTML = `<span class="icon icon-check success"></span>`
                     } else {
